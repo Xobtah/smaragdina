@@ -3,6 +3,10 @@ name = "smaragdina"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib"]
+# wasm-pack build --target web
+
 [dependencies]
 bincode = { version = "2.0.1", features = ["derive"] }
 clap = { version = "4.5.37", features = ["derive"] }
@@ -10,3 +14,4 @@ env_logger = "0.11.8"
 image = { version = "0.25.6", features = ["rayon"] }
 log = "0.4.27"
 thiserror = "2.0.12"
+wasm-bindgen = "0.2.100"

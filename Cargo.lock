@@ -1018,6 +1018,7 @@ dependencies = [
  "image",
  "log",
  "thiserror 2.0.12",
+ "wasm-bindgen",
 ]
 
 [[package]]
