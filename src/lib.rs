@@ -1,6 +1,5 @@
 use wasm_bindgen::prelude::*;
 
-mod eraro;
 mod komuna;
 mod sekreto;
 mod servajxoj;
@@ -17,10 +16,10 @@ pub fn greet(name: &str) {
 
 #[wasm_bindgen]
 pub fn embed(cover: &str, embed: &str, stego: &str) {
-    komuna::ensxipigxi(cover, embed, stego).unwrap();
+    komuna::ensxipigxi(cover, embed, stego, None).unwrap();
 }
 
 #[wasm_bindgen]
 pub fn extract(stego: &str) {
-    komuna::ekstrakti(stego, None).unwrap();
+    komuna::ekstrakti(stego, None, None).unwrap();
 }

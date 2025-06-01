@@ -1,9 +1,7 @@
 use std::path::PathBuf;
 
 use clap::Parser;
-use eraro::Eraro;
 
-mod eraro;
 mod komuna;
 mod sekreto;
 mod servajxoj;
@@ -27,6 +25,12 @@ enum Command {
         /// Path to the data file to be hidden
         #[arg(short = 'e', long = "embed_file")]
         dosierenhavo: PathBuf,
+        /// Passphrase used for encryption, won't be encrypted otherwise
+        #[arg(short = 'p', long = "passphrase")]
+        sekreta_frazo: Option<String>,
+        /// Hint for the passphrase
+        #[arg(short = 'h', long = "hint")]
+        sugesto: Option<String>,
         /// Path to the stego file (containing hidden data) for extraction
         #[arg(short = 's', long = "stego_file")]
         stegodosiero: PathBuf,
@@ -38,25 +42,41 @@ enum Command {
         /// Path to directory where the embed tile will be extracted
         #[arg(short = 'd', long = "dest")]
         celloko: Option<PathBuf>,
+        /// Passphrase used for decryption
+        #[arg(short = 'p', long = "passphrase")]
+        sekreta_frazo: Option<String>,
     },
 }
 
 impl Command {
-    fn execute(self) -> Result<(), Eraro> {
+    fn execute(self) -> Result<(), komuna::Eraro> {
         match self {
             Command::Embed {
                 kovrilodosiero,
                 dosierenhavo,
+                sekreta_frazo,
+                sugesto,
                 stegodosiero,
-            } => komuna::ensxipigxi(kovrilodosiero, dosierenhavo, stegodosiero),
+            } => komuna::ensxipigxi(
+                kovrilodosiero,
+                dosierenhavo,
+                stegodosiero,
+                match (sugesto, sekreta_frazo) {
+                    (None, None) => None,
+                    (None, Some(sekreta_frazo)) => Some((String::new(), sekreta_frazo)),
+                    (Some(_), None) => panic!("Missing passphrase"),
+                    (Some(sugesto), Some(sekreta_frazo)) => Some((sugesto, sekreta_frazo)),
+                },
+            ),
             Command::Extract {
                 stegodosiero,
                 celloko,
-            } => komuna::ekstrakti(stegodosiero, celloko),
+                sekreta_frazo,
+            } => komuna::ekstrakti(stegodosiero, celloko, sekreta_frazo),
         }
     }
 }
 
-fn main() -> Result<(), Eraro> {
+fn main() -> Result<(), komuna::Eraro> {
     Args::parse().ordo.execute()
 }
