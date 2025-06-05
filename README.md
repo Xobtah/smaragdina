@@ -50,7 +50,7 @@ Options:
   -h, --help
 ```
 
-# Side node
+# Side note
 
 The code is written in Esperanto for reasons I don't feel the need to justify.
 
